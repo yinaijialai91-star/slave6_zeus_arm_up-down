@@ -9,12 +9,10 @@
 #define SLAVE3_ZEUS_ARM_STS3215_ID 0x410 // 万能手腕
 #define SLAVE4_SQUID_ARM_ID 0x110        // いかさん
 #define SLAVE5_MARKER_ARM_ID 0x210       // マーカー
-#define SLAVE6_ZEUS_ARM_SHOUKOU_ID 0x410 // 万能手腕昇降
+#define SLAVE6_ZEUS_ARM_SHOUKOU_ID 0x120 // 万能手腕昇降
 #define SLAVEX_BUTSUDAN_LED_ID 0x115     // 仏壇
 
-#define ZEUS_START_LOCATE 131776
-
-#define ZEUS_ARM_SOREPPOITOKO 175000
+#define ZEUS_START_LOCATE 175000
 
 #define ZEUS_TENNISBALL_GET 32790
 #define ZEUS_TENNISBALL_SET 813860
@@ -72,91 +70,85 @@ void motor_control(void *pvParameters)
     switch (DATA[0])
     {
 
-    case 1:
-
+    case 1: // 万能手腕手動操作
       switch (DATA[1])
       {
-
-      case 1: // 万能手腕手動操作
-        switch (DATA[2])
-        {
-        case 1:
-          MOTOR.set_speed(30);
-          break;
-
-        case 2:
-          MOTOR.set_speed(-30);
-          break;
-
-        case 3:
-          MOTOR.set_speed(0);
-          break;
-
-        default:
-          break;
-        }
+      case 1:
+        MOTOR.set_speed(30);
         break;
 
-      case 2: // 万能手腕拾得
-        switch (DATA[2])
-        {
-        case 1:
-          MOTOR.set_location(ZEUS_TENNISBALL_GET);
-          break;
-
-        case 2:
-          MOTOR.set_location(ZEUS_BASEBALL_GET);
-          break;
-
-        case 3:
-          MOTOR.set_location(ZEUS_SHUTTLE_GET);
-          break;
-
-        default:
-          break;
-        }
+      case 2:
+        MOTOR.set_speed(-30);
         break;
 
-      case 3: // 万能手腕遺失
-        switch (DATA[2])
-        {
-        case 1:
-          MOTOR.set_location(ZEUS_TENNISBALL_SET);
-          break;
-
-        case 2:
-          MOTOR.set_location(ZEUS_BASEBALL_SET);
-          break;
-
-        case 3:
-          MOTOR.set_location(ZEUS_SHUTTLE_SET);
-          break;
-
-        default:
-          break;
-        }
-        break;
-
-      case 4:
-        switch (DATA[2])
-        {
-        case 1:
-          MOTOR.set_location(ZEUS_ARM_SOREPPOITOKO);
-          break;
-
-        default:
-          break;
-        }
+      case 3:
+        MOTOR.set_speed(0);
         break;
 
       default:
         break;
       }
       break;
-    }
 
-    vTaskDelay(pdMS_TO_TICKS(1));
+    case 2: // 万能手腕拾得
+      switch (DATA[1])
+      {
+      case 1:
+        MOTOR.set_location(ZEUS_TENNISBALL_GET);
+        break;
+
+      case 2:
+        MOTOR.set_location(ZEUS_BASEBALL_GET);
+        break;
+
+      case 3:
+        MOTOR.set_location(ZEUS_SHUTTLE_GET);
+        break;
+
+      default:
+        break;
+      }
+      break;
+
+    case 3: // 万能手腕遺失
+      switch (DATA[1])
+      {
+      case 1:
+        MOTOR.set_location(ZEUS_TENNISBALL_SET);
+        break;
+
+      case 2:
+        MOTOR.set_location(ZEUS_BASEBALL_SET);
+        break;
+
+      case 3:
+        MOTOR.set_location(ZEUS_SHUTTLE_SET);
+        break;
+
+      default:
+        break;
+      }
+      break;
+
+    case 4:
+      switch (DATA[1])
+      {
+      case 1:
+        MOTOR.set_location(ZEUS_ARM_SOREPPOITOKO);
+        break;
+
+      default:
+        break;
+      }
+      break;
+
+    default:
+      break;
+    }
+    break;
   }
+
+  vTaskDelay(pdMS_TO_TICKS(1));
 }
 
 void setup()
