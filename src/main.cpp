@@ -12,16 +12,16 @@
 #define SLAVE6_ZEUS_ARM_SHOUKOU_ID 0x120 // 万能手腕昇降
 #define SLAVEX_BUTSUDAN_LED_ID 0x115     // 仏壇
 
-#define ZEUS_START_LOCATE 175000
+int64_t ZEUS_START_LOCATE = 175000;
 
-#define ZEUS_TENNISBALL_GET 32790
-#define ZEUS_TENNISBALL_SET 813860
+int64_t ZEUS_TENNISBALL_GET = 32790;
+int64_t ZEUS_TENNISBALL_SET = 813860;
 
-#define ZEUS_BASEBALL_GET -8200
-#define ZEUS_BASEBALL_SET 813860
+int64_t ZEUS_BASEBALL_GET = -8200;
+int64_t ZEUS_BASEBALL_SET = 813860;
 
-#define ZEUS_SHUTTLE_GET 0
-#define ZEUS_SHUTTLE_SET 813860
+int64_t ZEUS_SHUTTLE_GET = 0;
+int64_t ZEUS_SHUTTLE_SET = 813860;
 
 uint16_t ID = 0;
 int8_t DATA[8] = {0};
@@ -95,10 +95,18 @@ void motor_control(void *pvParameters)
       {
       case 1:
         MOTOR.set_location(ZEUS_TENNISBALL_GET);
+        while (abs(MOTOR.get_location() - ZEUS_TENNISBALL_GET) > 6000)
+        {
+          vTaskDelay(pdMS_TO_TICKS(1));
+        }
         break;
 
       case 2:
         MOTOR.set_location(ZEUS_BASEBALL_GET);
+        while (abs(MOTOR.get_location() - ZEUS_BASEBALL_GET) > 6000)
+        {
+          vTaskDelay(pdMS_TO_TICKS(1));
+        }
         break;
 
       case 3:
@@ -115,10 +123,18 @@ void motor_control(void *pvParameters)
       {
       case 1:
         MOTOR.set_location(ZEUS_TENNISBALL_SET);
+        while (abs(MOTOR.get_location() - ZEUS_TENNISBALL_SET) > 6000)
+        {
+          vTaskDelay(pdMS_TO_TICKS(1));
+        }
         break;
 
       case 2:
         MOTOR.set_location(ZEUS_BASEBALL_SET);
+        while (abs(MOTOR.get_location() - ZEUS_BASEBALL_SET) > 6000)
+        {
+          vTaskDelay(pdMS_TO_TICKS(1));
+        }
         break;
 
       case 3:
@@ -134,7 +150,11 @@ void motor_control(void *pvParameters)
       switch (DATA[1])
       {
       case 1:
-        MOTOR.set_location(ZEUS_ARM_SOREPPOITOKO);
+        MOTOR.set_location(ZEUS_START_LOCATE);
+        while (abs(MOTOR.get_location() - ZEUS_START_LOCATE) > 6000)
+        {
+          vTaskDelay(pdMS_TO_TICKS(1));
+        }
         break;
 
       default:
@@ -166,11 +186,15 @@ void setup()
 
   MOTOR.setup();
 
-  MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1000.0); // kp, ki, 死区, 最高速度
+  MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 50.0); // kp, ki, 死区, 最高速度
 
   vTaskDelay(pdMS_TO_TICKS(1000));
 
   MOTOR.set_location(ZEUS_START_LOCATE);
+  while (abs(MOTOR.get_location() - ZEUS_START_LOCATE) > 6000)
+  {
+    vTaskDelay(pdMS_TO_TICKS(1));
+  }
 
   /***********************************CAN関連********************************************/
   twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT_V2(1, (gpio_num_t)TX_PIN, (gpio_num_t)RX_PIN, TWAI_MODE_NORMAL);
