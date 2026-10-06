@@ -12,18 +12,18 @@
 #define SLAVE6_ZEUS_ARM_SHOUKOU_ID 0x410 // 万能手腕昇降
 #define SLAVEX_BUTSUDAN_LED_ID 0x115     // 仏壇
 
-#define ZEUS_START_LOCATE 131776
+#define ZEUS_START_LOCATE 91776
 
 #define ZEUS_ARM_SOREPPOITOKO 175000
 
 #define ZEUS_TENNISBALL_GET 32790
-#define ZEUS_TENNISBALL_SET 813860
+#define ZEUS_TENNISBALL_SET 819923 //(初期が779504
 
 #define ZEUS_BASEBALL_GET -8200
-#define ZEUS_BASEBALL_SET 813860
+#define ZEUS_BASEBALL_SET 329440 //(初期が281111
 
-#define ZEUS_SHUTTLE_GET 0
-#define ZEUS_SHUTTLE_SET 813860
+#define ZEUS_SHUTTLE_GET 66000
+#define ZEUS_SHUTTLE_SET 1169251 //(初期が1150518
 
 uint16_t ID = 0;
 int8_t DATA[8] = {0};
@@ -101,14 +101,20 @@ void motor_control(void *pvParameters)
         switch (DATA[2])
         {
         case 1:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1600.0); // kp, ki, kd, 死区, 最高速度(1300)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_TENNISBALL_GET);
           break;
 
         case 2:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1600.0); // kp, ki, kd, 死区, 最高速度(1300)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_BASEBALL_GET);
           break;
 
         case 3:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1600.0); // kp, ki, kd, 死区, 最高速度(1300)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_SHUTTLE_GET);
           break;
 
@@ -121,14 +127,20 @@ void motor_control(void *pvParameters)
         switch (DATA[2])
         {
         case 1:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1900.0); // kp, ki, kd, 死区, 最高速度(1600)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_TENNISBALL_SET);
           break;
 
         case 2:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1600.0); // kp, ki, kd, 死区, 最高速度(1300)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_BASEBALL_SET);
           break;
 
         case 3:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 2100.0); // kp, ki, kd, 死区, 最高速度(1900)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_SHUTTLE_SET);
           break;
 
@@ -141,6 +153,8 @@ void motor_control(void *pvParameters)
         switch (DATA[2])
         {
         case 1:
+          MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1900.0); // kp, ki, kd, 死区, 最高速度(1300)
+          vTaskDelay(pdMS_TO_TICKS(10));
           MOTOR.set_location(ZEUS_ARM_SOREPPOITOKO);
           break;
 
@@ -174,7 +188,7 @@ void setup()
 
   MOTOR.setup();
 
-  MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1000.0); // kp, ki, 死区, 最高速度
+  MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1600.0); // kp, ki, kd, 死区, 最高速度(1300)
 
   vTaskDelay(pdMS_TO_TICKS(1000));
 
