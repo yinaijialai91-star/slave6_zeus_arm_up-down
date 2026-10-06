@@ -1,0 +1,36 @@
+{
+  "name": "RobStride",
+  "version": "1.1.0",
+  "description": "Arduino library for controlling RobStride EDULITE05 motors via CAN bus on ESP32 platforms",
+  "keywords": [
+    "motor",
+    "control",
+    "robstride",
+    "can",
+    "esp32",
+    "motor-control",
+    "robotics",
+    "actuator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/necobit/RobStride_Library.git"
+  },
+  "authors": [
+    {
+      "name": "necobit",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/necobit/RobStride_Library",
+  "dependencies": {
+    "handmade0octopus/ESP32-TWAI-CAN": "^1.0.1"
+  },
+  "frameworks": "arduino",
+  "platforms": "espressif32",
+  "examples": [
+    "examples/BasicControl/BasicControl.ino",
+    "examples/DemoLoop/DemoLoop.ino"
+  ]
+}

@@ -1,0 +1,62 @@
+#######################################
+# Syntax Coloring Map For RobStride
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+RobStrideMotor	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+enable	KEYWORD2
+stop	KEYWORD2
+clear_fault	KEYWORD2
+set_zero_position	KEYWORD2
+write_parameter	KEYWORD2
+send_motion_command	KEYWORD2
+set_current_reference	KEYWORD2
+set_speed_reference	KEYWORD2
+set_position_reference	KEYWORD2
+set_run_mode	KEYWORD2
+set_limit_current	KEYWORD2
+set_limit_speed	KEYWORD2
+set_limit_accel_rad	KEYWORD2
+set_pp_limits	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+RS_P_MIN	LITERAL1
+RS_P_MAX	LITERAL1
+RS_V_MIN	LITERAL1
+RS_V_MAX	LITERAL1
+RS_KP_MIN	LITERAL1
+RS_KP_MAX	LITERAL1
+RS_KD_MIN	LITERAL1
+RS_KD_MAX	LITERAL1
+RS_T_MIN	LITERAL1
+RS_T_MAX	LITERAL1
+
+RS_IDX_RUN_MODE	LITERAL1
+RS_IDX_IQ_REF	LITERAL1
+RS_IDX_SPD_REF	LITERAL1
+RS_IDX_LIMIT_TORQUE	LITERAL1
+RS_IDX_CUR_KP	LITERAL1
+RS_IDX_CUR_KI	LITERAL1
+RS_IDX_LOC_REF	LITERAL1
+RS_IDX_LIMIT_SPD	LITERAL1
+RS_IDX_LIMIT_CUR	LITERAL1
+RS_IDX_ACC_RAD	LITERAL1
+RS_IDX_VEL_MAX	LITERAL1
+RS_IDX_ACC_SET	LITERAL1
+
+RS_MODE_MOTION	LITERAL1
+RS_MODE_POS_PP	LITERAL1
+RS_MODE_SPEED	LITERAL1
+RS_MODE_CURRENT	LITERAL1
+RS_MODE_POS_CSP	LITERAL1

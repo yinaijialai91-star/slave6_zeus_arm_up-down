@@ -1,5 +1,7 @@
 #include <DJIMotorCtrlESP.hpp>
 #include <HXC_TWAI.hpp>
+#include <ESP32-TWAI-CAN.hpp>
+#include <RobStride.h>
 
 #define TX_PIN D2
 #define RX_PIN D3
@@ -34,6 +36,8 @@ twai_handle_t receive_handle = NULL;
 HXC_TWAI CAN_BUS(D0, D1, CAN_RATE_1MBIT);
 
 M3508_P19 MOTOR(&CAN_BUS, 1);
+
+RobStrideMotor motor(1);
 
 void receive(void *pvParameters)
 {
@@ -149,6 +153,20 @@ void motor_control(void *pvParameters)
         }
         break;
 
+      case 5:
+        switch (DATA[2])
+        {
+        case 1:
+          motor.send_motion_command(3 * 3.141592f / 2.0f, 0, 10.0f, 0.5f, 0);
+          vTaskDelay(pdMS_TO_TICKS(1000));
+          motor.send_motion_command(2 * 3.141592f, 0, 10.0f, 0.5f, 0);
+          break;
+
+        default:
+          break;
+        }
+        break;
+
       default:
         break;
       }
@@ -172,6 +190,8 @@ void setup()
   else
     Serial.println("失敗！！");
 
+  /***********************************M3508********************************************/
+
   MOTOR.setup();
 
   MOTOR.set_location_pid(3.5, 0.0, 0.1, 0.0, 1000.0); // kp, ki, 死区, 最高速度
@@ -180,22 +200,41 @@ void setup()
 
   MOTOR.set_location(ZEUS_START_LOCATE);
 
-  /***********************************CAN関連********************************************/
-  twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT_V2(1, (gpio_num_t)TX_PIN, (gpio_num_t)RX_PIN, TWAI_MODE_NORMAL);
-  twai_timing_config_t t_config = TWAI_TIMING_CONFIG_1MBITS();
-  twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+  /***********************************M3508********************************************/
 
-  esp_err_t ret = twai_driver_install_v2(&g_config, &t_config, &f_config, &receive_handle);
-  if (ret == ESP_OK)
-    Serial.println("インストール完了");
-  else
-    Serial.println("インストール失敗");
-  ret = twai_start_v2(receive_handle);
-  if (ret == ESP_OK)
-    Serial.println("CANスタート完了");
-  else
-    Serial.println("CANスタート失敗");
-  /**************************************************************************************/
+  /***********************************edulite05********************************************/
+  // Initialize motor
+  motor.stop();
+  delay(50);
+  motor.clear_fault();
+  delay(50);
+
+  // Set to motion control mode (MIT mode)
+  motor.set_run_mode(RS_MODE_MOTION);
+  delay(20);
+
+  // Enable motor
+  motor.enable();
+  delay(50);
+
+  /***********************************edulite05********************************************/
+
+  // /***********************************CAN関連********************************************/
+  // twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT_V2(1, (gpio_num_t)TX_PIN, (gpio_num_t)RX_PIN, TWAI_MODE_NORMAL);
+  // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_1MBITS();
+  // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+
+  // esp_err_t ret = twai_driver_install_v2(&g_config, &t_config, &f_config, &receive_handle);
+  // if (ret == ESP_OK)
+  //   Serial.println("インストール完了");
+  // else
+  //   Serial.println("インストール失敗");
+  // ret = twai_start_v2(receive_handle);
+  // if (ret == ESP_OK)
+  //   Serial.println("CANスタート完了");
+  // else
+  //   Serial.println("CANスタート失敗");
+  // /**************************************************************************************/
 
   xTaskCreateUniversal(
       receive,
