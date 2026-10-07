@@ -157,9 +157,9 @@ void motor_control(void *pvParameters)
         switch (DATA[2])
         {
         case 1:
-          motor.send_motion_command(3 * 3.141592f / 2.0f, 0, 10.0f, 0.5f, 0);
+          motor.send_motion_command((3.141592 / -2 /*2 * 3.141592f*/), 0, 3.0f, 0.5f, 0);
           vTaskDelay(pdMS_TO_TICKS(1000));
-          motor.send_motion_command(2 * 3.141592f, 0, 10.0f, 0.5f, 0);
+          motor.send_motion_command((0 /*3.141592f*/), 0, 3.0f, 0.5f, 0);
           break;
 
         default:
@@ -212,29 +212,35 @@ void setup()
   // Set to motion control mode (MIT mode)
   motor.set_run_mode(RS_MODE_MOTION);
   delay(20);
+  motor.set_zero_position();
+  delay(20);
 
   // Enable motor
   motor.enable();
   delay(50);
 
+  motor.send_motion_command(0, 0, 10.0f, 0.5f, 0);
+
+  delay(100);
+
   /***********************************edulite05********************************************/
 
-  // /***********************************CAN関連********************************************/
-  // twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT_V2(1, (gpio_num_t)TX_PIN, (gpio_num_t)RX_PIN, TWAI_MODE_NORMAL);
-  // twai_timing_config_t t_config = TWAI_TIMING_CONFIG_1MBITS();
-  // twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+  /***********************************CAN関連********************************************/
+  twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT_V2(1, (gpio_num_t)TX_PIN, (gpio_num_t)RX_PIN, TWAI_MODE_NORMAL);
+  twai_timing_config_t t_config = TWAI_TIMING_CONFIG_1MBITS();
+  twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 
-  // esp_err_t ret = twai_driver_install_v2(&g_config, &t_config, &f_config, &receive_handle);
-  // if (ret == ESP_OK)
-  //   Serial.println("インストール完了");
-  // else
-  //   Serial.println("インストール失敗");
-  // ret = twai_start_v2(receive_handle);
-  // if (ret == ESP_OK)
-  //   Serial.println("CANスタート完了");
-  // else
-  //   Serial.println("CANスタート失敗");
-  // /**************************************************************************************/
+  esp_err_t ret = twai_driver_install_v2(&g_config, &t_config, &f_config, &receive_handle);
+  if (ret == ESP_OK)
+    Serial.println("インストール完了");
+  else
+    Serial.println("インストール失敗");
+  ret = twai_start_v2(receive_handle);
+  if (ret == ESP_OK)
+    Serial.println("CANスタート完了");
+  else
+    Serial.println("CANスタート失敗");
+  /**************************************************************************************/
 
   xTaskCreateUniversal(
       receive,
@@ -257,5 +263,6 @@ void setup()
 
 void loop()
 {
-  Serial.printf("NOW_LOCATE:%d\n", MOTOR.get_location());
+  vTaskDelay(pdMS_TO_TICKS(1));
+  // Serial.printf("NOW_LOCATE:%d\n", MOTOR.get_location());
 }
