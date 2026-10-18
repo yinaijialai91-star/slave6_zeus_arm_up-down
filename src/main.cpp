@@ -19,13 +19,13 @@
 #define ZEUS_ARM_SOREPPOITOKO 175000
 
 #define ZEUS_TENNISBALL_GET 32790
-#define ZEUS_TENNISBALL_SET 823290//813860
+#define ZEUS_TENNISBALL_SET 755435 //823290 // 813860
 
-#define ZEUS_BASEBALL_GET -8200
-#define ZEUS_BASEBALL_SET 311720
+#define ZEUS_BASEBALL_GET -8200 // 9952
+#define ZEUS_BASEBALL_SET 255837 //311720
 
 #define ZEUS_SHUTTLE_GET 62030
-#define ZEUS_SHUTTLE_SET 1161910
+#define ZEUS_SHUTTLE_SET 1085369 //1161910
 
 uint16_t ID = 0;
 int8_t DATA[8] = {0};
@@ -268,7 +268,6 @@ void loop()
       Serial.printf("ID:%x, DATA[0]:%d, DATA[1]:%d, DATA[2]:%d, DATA[3]:%d, DATA[4]:%d, DATA[5]:%d, DATA[6]:%d, DATA[7]:%d\n", ID, DATA[0], DATA[1], DATA[2], DATA[3], DATA[4], DATA[5], DATA[6], DATA[7]);
 
       motor_control();
-
     }
   }
   vTaskDelay(pdMS_TO_TICKS(1));
